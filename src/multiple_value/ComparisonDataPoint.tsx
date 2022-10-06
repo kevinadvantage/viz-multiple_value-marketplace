@@ -10,7 +10,7 @@ let ComparisonDataPointGroup = styled.div`
 
   margin: 10px 0;
   
-  font-size: 0.9em;
+  font-size: 1.5em;
   font-weight: 100;
   color: #a5a6a1;
 

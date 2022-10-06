@@ -47,6 +47,7 @@ const DataPoint = styled.div`
 
 const DataPointTitle = styled.div`
   font-weight: 100;
+  font-size: 1.5em;
   color: ${props => props.color};
   margin: 5px 0;
 `

@@ -9,8 +9,7 @@ let ComparisonDataPointGroup = styled.div`
   width: 100%;
 
   margin: 10px 0;
-  
-  font-size: 0.9em;
+
   font-weight: 100;
   color: #a5a6a1;
 
@@ -117,7 +116,7 @@ export const ComparisonDataPoint: React.FC<{
   }
 
   return (
-    <ComparisonDataPointGroup>
+    <ComparisonDataPointGroup style={{fontSize: `${config['font_size_comparison_data_point_group']}em`}}>
 
     {config[`comparison_style_${compDataPoint.name}`] !== 'percentage_change' ? null : (
       <ComparisonPercentageChange data-value={percChange} onClick={() => { handleClick(compDataPoint, event) }}>

@@ -161,7 +161,7 @@ class MultipleValue extends React.PureComponent {
               >
                 <DataPoint titlePlacement={config[`title_placement_${dataPoint.name}`]}>
                   {config[`show_title_${dataPoint.name}`] === false ? null : (
-                    <DataPointTitle color={config[`style_${dataPoint.name}`]}>
+                    <DataPointTitle color={config[`style_${dataPoint.name}`]} style={{fontSize: `${config['font_size_data_point_title']}em`}}>
                       {config[`title_override_${dataPoint.name}`] || dataPoint.label}
                     </DataPointTitle>
                   )}

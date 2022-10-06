@@ -27,6 +27,22 @@ const baseOptions = {
     order: 0,
     display_size: 'half'
   },
+  font_size_data_point_title: {
+    label: "Data pt font size",
+    type: 'string',
+    section: 'Style',
+    default: "1.5",
+    order: 0,
+    display_size: 'half '
+  },
+  font_size_comparison_data_point_group: {
+    label: "Comp grp font size",
+    type: 'string',
+    section: 'Style',
+    default: "1.5",
+    order: 0,
+    display_size: 'half '
+  },
 }
 
 let currentOptions = {}

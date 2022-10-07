@@ -19,9 +19,9 @@ const baseOptions = {
     section: 'Style',
     display: 'select',
     values: [
-      {'Auto': 'auto'},
-      {'Vertical': 'vertical'},
-      {'Horizontal': 'horizontal'}
+      { 'Auto': 'auto' },
+      { 'Vertical': 'vertical' },
+      { 'Horizontal': 'horizontal' }
     ],
     default: 'auto',
     order: 0,
@@ -55,7 +55,7 @@ const renderBlankVisualization = (element, done) => {
       data={[]}
     />,
     element,
-    done 
+    done
   );
 }
 
@@ -63,10 +63,10 @@ looker.plugins.visualizations.add({
   id: "multiple_value",
   label: "Multiple Value",
   options: baseOptions,
-  create: function(element, config) {
-    this.chart = renderBlankVisualization(element, () => {})
+  create: function (element, config) {
+    this.chart = renderBlankVisualization(element, () => { })
   },
-  updateAsync: function(data, element, config, queryResponse, details, done) {
+  updateAsync: function (data, element, config, queryResponse, details, done) {
     this.clearErrors();
 
     const measures = [].concat(
@@ -75,24 +75,24 @@ looker.plugins.visualizations.add({
       queryResponse.fields.table_calculations
     )
 
-    if(data.length < 1) {
-      this.addError({title: "No Results"})
+    if (data.length < 1) {
+      this.addError({ title: "No Results" })
       this.chart = renderBlankVisualization(element, done)
       return;
     }
 
     if (measures.length == 0) {
-      this.addError({title: "No Measures", message: "This chart requires measures"});
+      this.addError({ title: "No Measures", message: "This chart requires measures" });
       return;
     }
 
     if (queryResponse.fields.pivots.length) {
-      this.addError({title: "Pivoting not allowed", message: "This visualization does not allow pivoting"});
+      this.addError({ title: "Pivoting not allowed", message: "This visualization does not allow pivoting" });
       return;
     }
-    
+
     if (measures.length > 10) {
-      this.addError({title: "Maximum number of data points", message: "This visualization does not allow more than 10 data points to be selected"});
+      this.addError({ title: "Maximum number of data points", message: "This visualization does not allow more than 10 data points to be selected" });
       return;
     }
 
@@ -111,7 +111,7 @@ looker.plugins.visualizations.add({
     });
 
     const options = Object.assign({}, baseOptions)
-    
+
     dataPoints.forEach((dataPoint, index) => {
       //Style -- apply to all
       if (config.orientation === "horizontal") {
@@ -152,8 +152,8 @@ looker.plugins.visualizations.add({
           section: 'Style',
           display: 'select',
           values: [
-            {'Above number': 'above'},
-            {'Below number': 'below'},
+            { 'Above number': 'above' },
+            { 'Below number': 'below' },
           ],
           default: 'above',
           order: 10 * index + 5,
@@ -182,10 +182,10 @@ looker.plugins.visualizations.add({
             display: 'radio',
             label: `${dataPoint.label} - Style`,
             values: [
-              {'Show as Value': 'value'},
-              {'Show as Percentage Change': 'percentage_change'},
-              {'Calculate Progress': 'calculate_progress'},
-              {'Calculate Progress (with Percentage)': 'calculate_progress_perc'},
+              { 'Show as Value': 'value' },
+              { 'Show as Percentage Change': 'percentage_change' },
+              { 'Calculate Progress': 'calculate_progress' },
+              { 'Calculate Progress (with Percentage)': 'calculate_progress_perc' },
             ],
             section: 'Comparison',
             default: 'value',
@@ -220,17 +220,17 @@ looker.plugins.visualizations.add({
               label: `${dataPoint.label} - Label Placement`,
               display: 'select',
               values: [
-                {'Above': 'above'},
-                {'Below': 'below'},
-                {'Left': 'left'},
-                {'Right': 'right'},
+                { 'Above': 'above' },
+                { 'Below': 'below' },
+                { 'Left': 'left' },
+                { 'Right': 'right' },
               ],
               default: 'below',
               section: 'Comparison',
               order: 10 * index + 5,
             }
             if (config[`comparison_style_${dataPoint.name}`] === "value" ||
-                config[`comparison_style_${dataPoint.name}`] === "calculate_progress_perc") {
+              config[`comparison_style_${dataPoint.name}`] === "calculate_progress_perc") {
               options[`comp_value_format_${dataPoint.name}`] = {
                 type: 'string',
                 label: `Comparison Value Format`,
@@ -244,7 +244,7 @@ looker.plugins.visualizations.add({
         }
       }
     })
-  
+
     if (
       !isEqual(currentOptions, options) ||
       !isEqual(currentConfig, config)
@@ -261,13 +261,30 @@ looker.plugins.visualizations.add({
         lastDataPointIndex++
         return true
       } else {
-        valuesToComparisonsMap[lastDataPointIndex] = index
+        // initialize comparison
+        if (!valuesToComparisonsMap[lastDataPointIndex]) {
+          valuesToComparisonsMap[lastDataPointIndex] = {};
+        }
+
+        const comparison = valuesToComparisonsMap[lastDataPointIndex];
+        // set a max of 2 comparisons
+        if (!comparison.comparison1Index) {
+          comparison.comparison1Index = index;
+        } else if (!comparison.comparison2Index) {
+          comparison.comparison2Index = index;
+        }
       }
       return false
     }).map((fullValue, index) => {
-      const comparisonIndex = valuesToComparisonsMap[index]
-      if (comparisonIndex) {
-        fullValue.comparison = dataPoints[comparisonIndex]
+      const comparison = valuesToComparisonsMap[index]
+      // set comparisons 1 and 2 if data point has a comparison
+      if (comparison) {
+        if (comparison?.comparison1Index) {
+          fullValue.comparison1 = dataPoints[comparison.comparison1Index]
+        }
+        if (comparison?.comparison2Index) {
+          fullValue.comparison2 = dataPoints[comparison.comparison2Index]
+        }
       }
       return fullValue;
     })

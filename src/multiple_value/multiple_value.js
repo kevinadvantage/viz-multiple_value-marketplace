@@ -182,24 +182,28 @@ class MultipleValue extends React.PureComponent {
                       {dataPoint.html ? ReactHtmlParser(DOMPurify.sanitize(dataPoint.html)) : dataPoint.formattedValue}
                     </DataPointValue>
                   </DataPoint>
-                  {!compDataPoint1 ? null : (
-                    <ComparisonDataPoint
-                      config={config}
-                      compDataPoint={compDataPoint1}
-                      dataPoint={dataPoint}
-                      percChange={percChange1}
-                      progressPerc={progressPerc1}
-                      handleClick={this.handleClick}
-                    />)}
-                    {!compDataPoint2 ? null : (
-                    <ComparisonDataPoint
-                      config={config}
-                      compDataPoint={compDataPoint2}
-                      dataPoint={dataPoint}
-                      percChange={percChange2}
-                      progressPerc={progressPerc2}
-                      handleClick={this.handleClick}
-                    />)}
+                  {!compDataPoint1 && !compDataPoint2 ? null : (
+                    <div style={{ display: 'flex', flexFlow: 'column wrap' }}>
+                      {!compDataPoint1 ? null : (
+                        <ComparisonDataPoint
+                          config={config}
+                          compDataPoint={compDataPoint1}
+                          dataPoint={dataPoint}
+                          percChange={percChange1}
+                          progressPerc={progressPerc1}
+                          handleClick={this.handleClick}
+                        />)}
+                      {!compDataPoint2 ? null : (
+                        <ComparisonDataPoint
+                          config={config}
+                          compDataPoint={compDataPoint2}
+                          dataPoint={dataPoint}
+                          percChange={percChange2}
+                          progressPerc={progressPerc2}
+                          handleClick={this.handleClick}
+                        />)}
+                    </div>
+                  )}
                 </DataPointGroup>
                 {config.dividers && config.orientation === 'horizontal' && index < (data.length - 1) &&
                   <Divider />

@@ -183,7 +183,7 @@ class MultipleValue extends React.PureComponent {
                     </DataPointValue>
                   </DataPoint>
                   {!compDataPoint1 && !compDataPoint2 ? null : (
-                    <div style={{ display: 'flex', flexFlow: 'column wrap' }}>
+                    <div style={{ display: 'flex', flexFlow: 'column wrap', flex: '1', width: '100%' }}>
                       {!compDataPoint1 ? null : (
                         <ComparisonDataPoint
                           config={config}
